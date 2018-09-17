@@ -24,7 +24,8 @@ public class StopPoint
     private Date timeToLive;
     private String modeName;
 
-    public String toString(){
+    public String toString()
+    {
         return "ID: " + id +
                 "\toperationType: " + operationType +
                 "\tvehicleId: " + vehicleId +
@@ -45,5 +46,4 @@ public class StopPoint
                 "\ttimeToLive: " + timeToLive +
                 "\tmodeName: " + modeName;
     }
-
 }

@@ -31,7 +31,6 @@ public class Request
         String requestString = request.buildRequest(request.naptanId);
 
         Client client = ClientBuilder.newBuilder().register(StopPoint.class).register(JacksonFeature.class).build();
-        //System.out.println(jsonText = client.target(requestString).request().get(String.class));
         return client.target(requestString).request().get(String.class);
     }
 }

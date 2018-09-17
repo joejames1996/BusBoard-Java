@@ -10,12 +10,14 @@ public class JsonParser
     {
         StopPoint[] busText = jsonParser(jsonString, StopPoint[].class);
 
-        for (StopPoint bus : busText ) {
+        for (StopPoint bus : busText )
+        {
             System.out.println(bus);
         }
     }
 
-    public static <T> T jsonParser(String jsonText, Class<T> classType ){
+    public static <T> T jsonParser(String jsonText, Class<T> classType)
+    {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(String.class, (JsonDeserializer<String>) (jsonElement, type, jsonDeserializationContext) ->
                 jsonElement.getAsString());
