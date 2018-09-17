@@ -3,20 +3,28 @@ package training.busboard;
 public class Postcode
 {
 
-    private final String postcode;
-    private final String country;
-    private final String longitude;
-    private final String latitude;
-    private final String incode;
-    private final String outcode;
+    public result result;
 
-    public Postcode (String postcode, String country, String longitude, String latitude, String incode, String outcode)
+    public class result
     {
-        this.postcode = postcode;
-        this.country = country;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.incode = incode;
-        this.outcode = outcode;
+        public String postcode;
+        public String country;
+        public String longitude;
+        public String latitude;
+        public String outcode;
+        public String incode;
+
+        public String toString ()
+        {
+            return "Postcode: " + postcode + "\tCountry: " + country + "\tlongitude: " + longitude + "\tlatitude: " + latitude + "\tincode: " + incode + "\toutcode: " +
+                   outcode;
+        }
+
     }
+
+    public String toString()
+    {
+        return result.toString();
+    }
+
 }
