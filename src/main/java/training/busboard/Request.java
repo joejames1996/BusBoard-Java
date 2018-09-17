@@ -10,7 +10,12 @@ public class Request
     private        String naptanId;
     private static String requestPrefix = "";
     private static String requestSuffix = "";
-    private static String requestLatLon = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=200";
+
+    public static final String requestLatLon = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=500";
+    // public static final String requestPrefixTravel = "https://api.tfl.gov.uk/StopPoint/";
+    // public static final String requestSuffixTravel = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
+    // public static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
+    // public static final String requestSuffixPostcode = "";
 
     public Request (String naptanId)
     {

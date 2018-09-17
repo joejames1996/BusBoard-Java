@@ -21,7 +21,6 @@ public class StopPoint implements Comparable<StopPoint>
                 "\tcommonName: " + commonName;
     }
 
-    @Override
     public int compareTo (StopPoint o)
     {
         return this.expectedArrival.compareTo(o.expectedArrival);
