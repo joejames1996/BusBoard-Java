@@ -4,10 +4,10 @@ import java.util.Scanner;
 
 public class ConsoleInput
 {
-    public static void readInput()
+    public static void readInput ()
     {
         Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNextLine())
+        while (scanner.hasNextLine())
         {
             String lineOfText = scanner.nextLine();
 
