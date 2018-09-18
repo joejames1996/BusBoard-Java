@@ -30,17 +30,14 @@ public class ConsoleInput
                     spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
                 }
 
-                StopPoint[] spArray = new StopPoint[spMap.size()];
-                spMap.values().toArray(spArray);
+                List<StopPoint> spArrayList = new ArrayList<>();
 
-                ArrayList<StopPoint> spArrayList = new ArrayList<>();
+                for (double spDouble : spMap.keySet()) { spArrayList.addAll(Arrays.asList(stopPointPrinting(spMap.get(spDouble).id))); }
+                Collections.sort(spArrayList);
 
-                spArrayList.addAll(Arrays.asList(stopPointPrinting(spArray[0].id)));
-                spArrayList.addAll(Arrays.asList(stopPointPrinting(spArray[1].id)));
-
-                StopPoint[] spArray2 = new StopPoint[spArrayList.size()];
-                spArrayList.toArray(spArray2);
-                return spArray2;
+                StopPoint[] spArray = new StopPoint[spArrayList.size()];
+                spArrayList.toArray(spArray);
+                return spArray;
             }
         }
 

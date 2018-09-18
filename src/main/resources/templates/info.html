@@ -4,6 +4,19 @@
       layout:decorate="layout">
 <head>
     <title>Bus Information</title>
+    <script>
+        function sleep(ms){
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function reload() {
+            console.log("Sleeping");
+            await sleep(30000);
+            console.log("Waking");
+            location.reload();
+        }
+        reload();
+    </script>
 </head>
 <body>
 <div layout:fragment="content" class="container body-content">
@@ -24,7 +37,7 @@
                 <!--<td><span th:text="${busInfo[0].expectedArrival}"></span></td>
                 <td><span th:text="${busInfo[0].lineName}"></span></td>
                 <td><span th:text="${busInfo[0].destinationName}"></span></td>-->
-                <td th:text="${val.expectedArrival}"></td>
+                <td th:text="${val.getArrival()}"></td>
                 <td th:text="${val.lineName}"></td>
                 <td th:text="${val.stationName}"></td>
                 <td th:text="${val.destinationName}"></td>

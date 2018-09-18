@@ -1,5 +1,9 @@
 package training.busboard;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 
 public class StopPoint implements Comparable<StopPoint>
@@ -14,10 +18,10 @@ public class StopPoint implements Comparable<StopPoint>
     public final Date   expectedArrival;
     public final double lat;
     public final double lon;
-    public double distanceFromPostcode;
+    public       double distanceFromPostcode;
 
-    public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName, Date expectedArrival, double lat, double lon,
-                      double distanceFromPostcode)
+    public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName, Date expectedArrival, double lat, double lon
+            , double distanceFromPostcode)
     {
         this.id = id;
         this.lineName = lineName;
@@ -39,6 +43,12 @@ public class StopPoint implements Comparable<StopPoint>
     public int compareTo (StopPoint o)
     {
         return this.expectedArrival.compareTo(o.expectedArrival);
+    }
+
+    public String getArrival ()
+    {
+        return String.format("%02d", expectedArrival.getHours()) + ":" + String.format("%02d", expectedArrival.getMinutes()) + ":" +
+               String.format("%02d", expectedArrival.getSeconds());
     }
 
 }
