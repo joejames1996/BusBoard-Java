@@ -37,20 +37,11 @@ public class Request
 
     public static String sendRequest (String naptanId, InputType inputType)
     {
-        String  requestString = Request.buildRequest(naptanId, InputType inputType);
+        String  requestString = Request.buildRequest(naptanId, inputType);
 
-        Client client = null;
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 
-        if (inputType == InputType.STOP_CODE)
-        {
-            client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-        }
-        else if (inputType == InputType.POST_CODE)
-        {
-            client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-        }
-
-        System.out.println(requestString);
+        System.out.println(requestString + " " + inputType);
         return client.target(requestString).request().get(String.class);
     }
 }

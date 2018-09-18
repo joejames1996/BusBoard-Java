@@ -10,14 +10,13 @@ public class ConsoleInput
     public static void readInput ()
     {
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine())
+        do
         {
             System.out.println("Please input a postcode or stopcode: \n");
             String lineOfText = scanner.nextLine();
             if (lineOfText.isEmpty()) continue;
 
             InputType responseType = InputType.POST_CODE;
-            //*
             if (responseType == InputType.STOP_CODE)
             {
                 String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
@@ -27,8 +26,6 @@ public class ConsoleInput
                     System.out.println(json[i]);
                 }
             }
-            //*/
-            //*
             else if (responseType == InputType.POST_CODE)
             {
                 String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
@@ -37,12 +34,14 @@ public class ConsoleInput
                 {
                     String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
 
-                    StopPoint sp = JsonParser.jsonParser(Request.sendRequest(latLong, InputType.LAT_LONG), StopPoint.class);
+                    String stuff = Request.sendRequest(latLong, InputType.LAT_LONG);
+
+                    StopPoint sp = JsonParser.jsonParser(stuff, StopPoint.class);
                     for (int i = 0; i < sp.stopPoints.length; i++)
                     { System.out.println(sp.stopPoints[i]); }
                 }
             }
-            //*/
-        }
+
+        } while (scanner.hasNextLine());
     }
 }
