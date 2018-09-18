@@ -5,43 +5,46 @@ import java.util.*;
 public class ConsoleInput
 {
 
-
-    public static void readInput (String lineOfText)
+    public static StopPoint[] readInput (String lineOfText)
     {
-            InputType responseType = getInputType(lineOfText);
-            if (responseType == InputType.STOP_CODE) { stopPointPrinting(lineOfText); }
-            else if (responseType == InputType.POST_CODE)
+        InputType responseType = getInputType(lineOfText);
+        if (responseType == InputType.STOP_CODE) { stopPointPrinting(lineOfText); }
+        else if (responseType == InputType.POST_CODE)
+        {
+            String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
+            Postcode json     = JsonParser.jsonParser(response, Postcode.class);
+            if (json != null)
             {
-                String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
-                Postcode json     = JsonParser.jsonParser(response, Postcode.class);
-                if (json != null)
+                String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
+
+                String stuff = Request.sendRequest(latLong, InputType.LAT_LONG);
+
+                StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
+                SortedMap<Double, StopPoint> spMap = new TreeMap<>();
+
+                for (int i = 0; i < sp.stopPoints.length; i++)
                 {
-                    String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
+                    //System.out.println(sp.stopPoints[i]);
+                    sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(json.result.latitude, json.result.longitude, sp.stopPoints[i].lat,
+                                                                                             sp.stopPoints[i].lon);
+                    //System.out.println(sp.stopPoints[i].distanceFromPostcode);
 
-                    String stuff = Request.sendRequest(latLong, InputType.LAT_LONG);
-
-                    StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
-                    SortedMap<Double, StopPoint> spMap = new TreeMap<>();
-
-                    for (int i = 0; i < sp.stopPoints.length; i++)
-                    {
-                        //System.out.println(sp.stopPoints[i]);
-                        sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(json.result.latitude, json.result.longitude,
-                                                                                                 sp.stopPoints[i].lat, sp.stopPoints[i].lon);
-                        //System.out.println(sp.stopPoints[i].distanceFromPostcode);
-
-                        spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
-                    }
-
-                    System.out.println(spMap.get(spMap.keySet().toArray()[0]).distanceFromPostcode);
-                    System.out.println(spMap.get(spMap.keySet().toArray()[1]).distanceFromPostcode);
-
-                    stopPointPrinting(spMap.get(spMap.keySet().toArray()[0]).id);
-                    stopPointPrinting(spMap.get(spMap.keySet().toArray()[1]).id);
-
-                    //spMap.values().toArray()
+                    spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
                 }
+
+                return (StopPoint[]) spMap.values().toArray();
+/*
+                System.out.println(spMap.get(spMap.keySet().toArray()[0]).distanceFromPostcode);
+                System.out.println(spMap.get(spMap.keySet().toArray()[1]).distanceFromPostcode);
+
+                stopPointPrinting(spMap.get(spMap.keySet().toArray()[0]).id);
+                stopPointPrinting(spMap.get(spMap.keySet().toArray()[1]).id);
+*/
+                //spMap.values().toArray()
             }
+        }
+
+        return null;
     }
 
     private static InputType getInputType (String input)

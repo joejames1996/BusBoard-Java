@@ -10,8 +10,8 @@ public class Main
     {
         do
         {
-            String input = scanner.nextLine();
-            if (input == null) {continue;}
+            String input = scanner.nextLine().trim();
+            if (input == null || input.isEmpty()) {continue;}
             ConsoleInput.readInput(input);
         } while (scanner.hasNextLine());
 
