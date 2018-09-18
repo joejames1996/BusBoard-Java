@@ -6,11 +6,14 @@ public class StopPoint implements Comparable<StopPoint>
 {
     public StopPoint[] stopPoints;
 
-    private String id;
+    public String id;
     private String lineName;
     private String destinationName;
     private String commonName;
     private Date expectedArrival;
+    public double lat;
+    public double lon;
+    public double distanceFromPostcode;
 
     public String toString ()
     {
@@ -18,7 +21,9 @@ public class StopPoint implements Comparable<StopPoint>
                "\tlineName: " + lineName +
                "\tdestinationName: " + destinationName +
                "\tID: " + id +
-                "\tcommonName: " + commonName;
+               "\tcommonName: " + commonName +
+                "\tlat: " + lat +
+                "\tlon: " + lon;
     }
 
     public int compareTo (StopPoint o)

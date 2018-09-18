@@ -9,8 +9,8 @@ public class Postcode
     {
         public String postcode;
         public String country;
-        public String longitude;
-        public String latitude;
+        public double longitude;
+        public double latitude;
         public String outcode;
         public String incode;
 

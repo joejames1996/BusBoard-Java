@@ -4,10 +4,7 @@ import java.util.List;
 
 public class StopsFromLatLong
 {
-    private String requestPrefix = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=200";
-    public static List<StopPoint> listSP;
-
-    public double latLongDistance(double lat1, double lon1, double lat2, double lon2)
+    public static double latLongDistance(double lat1, double lon1, double lat2, double lon2)
     {
         int    R    = 6371; // Radius of the earth in km
         double dLat = deg2rad(lat2 - lat1);  // deg2rad below
@@ -18,7 +15,7 @@ public class StopsFromLatLong
         return d;
     }
 
-    public double deg2rad(double deg) {
+    public static double deg2rad(double deg) {
         return  deg * (Math.PI / 180.0);
     }
 }
