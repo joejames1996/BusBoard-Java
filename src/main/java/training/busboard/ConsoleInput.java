@@ -1,7 +1,5 @@
 package training.busboard;
 
-import javafx.scene.paint.Stop;
-
 import java.util.*;
 
 public class ConsoleInput extends Thread
@@ -26,10 +24,10 @@ public class ConsoleInput extends Thread
         else if (responseType == InputType.POST_CODE)
         {
             String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
-            Postcode json     = JsonParser.jsonParser(response, Postcode.class);
-            if (json != null)
+            Postcode postcode = JsonParser.jsonParser(response, Postcode.class);
+            if (postcode != null)
             {
-                String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
+                String latLong = "&lat=" + postcode.result.latitude + "&lon=" + postcode.result.longitude; // TODO: clean these lines up
                 String stuff   = Request.sendRequest(latLong, InputType.LAT_LONG);
 
                 StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
@@ -37,8 +35,8 @@ public class ConsoleInput extends Thread
 
                 for (int i = 0; i < sp.stopPoints.length; i++)
                 {
-                    sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(json.result.latitude, json.result.longitude, sp.stopPoints[i].lat,
-                                                                                             sp.stopPoints[i].lon);
+                    sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(postcode.result.latitude, postcode.result.longitude,
+                                                                                             sp.stopPoints[i].lat, sp.stopPoints[i].lon);
                     spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
                 }
 
@@ -53,7 +51,10 @@ public class ConsoleInput extends Thread
                     threaded[threadTotalIndex++].start();
                 }
                 for (int threadIndex = 0; threadIndex < threadTotalIndex; threadIndex++)
-                { spArrayList.addAll(Arrays.asList(threaded[threadIndex].stopPointArray)); }
+                {
+                    threaded[threadIndex].join();
+                    spArrayList.addAll(Arrays.asList(threaded[threadIndex].stopPointArray));
+                }
 
                 Collections.sort(spArrayList);
                 for (int index = 0; index < spArrayList.size(); index++)
