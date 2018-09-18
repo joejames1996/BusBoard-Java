@@ -1,5 +1,7 @@
 package training.busboard;
 
+import javafx.scene.paint.Stop;
+
 import java.util.*;
 
 public class ConsoleInput
@@ -16,7 +18,6 @@ public class ConsoleInput
             if (json != null)
             {
                 String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
-
                 String stuff = Request.sendRequest(latLong, InputType.LAT_LONG);
 
                 StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
@@ -24,23 +25,13 @@ public class ConsoleInput
 
                 for (int i = 0; i < sp.stopPoints.length; i++)
                 {
-                    //System.out.println(sp.stopPoints[i]);
                     sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(json.result.latitude, json.result.longitude, sp.stopPoints[i].lat,
                                                                                              sp.stopPoints[i].lon);
-                    //System.out.println(sp.stopPoints[i].distanceFromPostcode);
-
                     spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
                 }
 
-                return (StopPoint[]) spMap.values().toArray();
-/*
-                System.out.println(spMap.get(spMap.keySet().toArray()[0]).distanceFromPostcode);
-                System.out.println(spMap.get(spMap.keySet().toArray()[1]).distanceFromPostcode);
-
-                stopPointPrinting(spMap.get(spMap.keySet().toArray()[0]).id);
-                stopPointPrinting(spMap.get(spMap.keySet().toArray()[1]).id);
-*/
-                //spMap.values().toArray()
+                StopPoint[] spArray = new StopPoint[spMap.size()];
+                return spMap.values().toArray(spArray);
             }
         }
 
