@@ -9,7 +9,26 @@
 <div layout:fragment="content" class="container body-content">
     <h2>Bus Information</h2>
     <div>
-        <p>You entered postcode <span th:text="${busInfo[0].toString}"></span></p>
+        <!--<p>You entered postcode <span th:text="${busInfo[0].commonName}"></span></p>-->
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Arrival Time:</th>
+                <th>Line Name:</th>
+                <th>Destination:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="val,iter : ${busInfo}">
+                <!--<td><span th:text="${busInfo[0].expectedArrival}"></span></td>
+                <td><span th:text="${busInfo[0].lineName}"></span></td>
+                <td><span th:text="${busInfo[0].destinationName}"></span></td>-->
+                <td th:text="${val.expectedArrival}"></td>
+                <td th:text="${val.lineName}"></td>
+                <td th:text="${val.destinationName}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>
