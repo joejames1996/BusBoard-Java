@@ -11,7 +11,7 @@ public class Request
     public static final String requestSuffixTravel = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
     public static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
 
-    public static String buildRequest (String naptanId, InputType inputType)
+    public static String buildRequest (String naptanId, InputType inputType) throws Exception
     {
         StringBuilder stringBuilder = new StringBuilder();
         switch (inputType)
@@ -34,13 +34,15 @@ public class Request
         return stringBuilder.toString();
     }
 
-    public static String sendRequest (String naptanId, InputType inputType)
+    public static String sendRequest (String naptanId, InputType inputType) throws Exception
     {
         String  requestString = Request.buildRequest(naptanId, inputType);
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
 
         System.out.println(requestString + " " + inputType);
-        return client.target(requestString).request().get(String.class);
+        String result = client.target(requestString).request().get(String.class);
+        client.close();
+        return result;
     }
 }

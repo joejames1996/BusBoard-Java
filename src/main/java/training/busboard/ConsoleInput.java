@@ -7,7 +7,7 @@ import java.util.*;
 public class ConsoleInput
 {
 
-    public static StopPoint[] readInput (String lineOfText)
+    public static StopPoint[] readInput (String lineOfText) throws Exception
     {
         InputType responseType = getInputType(lineOfText);
         if (responseType == InputType.STOP_CODE) { return stopPointPrinting(lineOfText); }
@@ -53,15 +53,16 @@ public class ConsoleInput
         else { return InputType.STOP_CODE; }
     }
 
-    private static StopPoint[] stopPointPrinting (String lineOfText)
+    private static StopPoint[] stopPointPrinting (String lineOfText) throws Exception
     {
         String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
         StopPoint[] json     = JsonParser.jsonParser(response, StopPoint[].class);
+/*
         for (int i = 0; i < json.length && i < 5; i++)
         {
             System.out.println(json[i]);
         }
-
+//*/
         return json;
     }
 }

@@ -7,6 +7,9 @@
 </head>
 <body>
 <div layout:fragment="content" class="container body-content">
+    <div th:if="${error}" class="alert alert-danger">
+        You didn't put in a valid postcode.
+    </div>
     <div class="jumbotron">
         <h1>BusBoard</h1>
         <p class="lead">For all your bus info needs. Enter a postcode below and click enter to see bus times for that location.</p>
