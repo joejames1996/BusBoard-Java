@@ -10,7 +10,7 @@ public class ConsoleInput
     public static StopPoint[] readInput (String lineOfText)
     {
         InputType responseType = getInputType(lineOfText);
-        if (responseType == InputType.STOP_CODE) { stopPointPrinting(lineOfText); }
+        if (responseType == InputType.STOP_CODE) { return stopPointPrinting(lineOfText); }
         else if (responseType == InputType.POST_CODE)
         {
             String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);

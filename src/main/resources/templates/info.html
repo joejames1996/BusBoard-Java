@@ -15,6 +15,7 @@
             <tr>
                 <th>Arrival Time:</th>
                 <th>Line Name:</th>
+                <th>Station:</th>
                 <th>Destination:</th>
             </tr>
             </thead>
@@ -25,6 +26,7 @@
                 <td><span th:text="${busInfo[0].destinationName}"></span></td>-->
                 <td th:text="${val.expectedArrival}"></td>
                 <td th:text="${val.lineName}"></td>
+                <td th:text="${val.stationName}"></td>
                 <td th:text="${val.destinationName}"></td>
             </tr>
             </tbody>
