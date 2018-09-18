@@ -13,7 +13,7 @@ public class StopPoint implements Comparable<StopPoint>
     public final Date   expectedArrival;
     public final double lat;
     public final double lon;
-    public final double distanceFromPostcode;
+    public double distanceFromPostcode;
 
     public StopPoint (String id, String lineName, String destinationName, String commonName, Date expectedArrival, double lat, double lon,
                       double distanceFromPostcode)
@@ -30,8 +30,8 @@ public class StopPoint implements Comparable<StopPoint>
 
     public String toString ()
     {
-        return "expectedArrival: " + expectedArrival + "\tlineName: " + lineName + "\tdestinationName: " + destinationName + "\tID: " + id + "\tcommonName: " +
-               commonName + "\tlat: " + lat + "\tlon: " + lon;
+        return "expectedArrival: " + expectedArrival + "\nlineName: " + lineName + "\ndestinationName: " + destinationName + "\nID: " + id + "\ncommonName: " +
+               commonName + "\nlat: " + lat + "\nlon: " + lon + "\ndistanceFromPostcode: " + distanceFromPostcode;
     }
 
     public int compareTo (StopPoint o)

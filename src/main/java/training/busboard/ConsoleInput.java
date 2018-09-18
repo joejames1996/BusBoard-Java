@@ -18,7 +18,7 @@ public class ConsoleInput
             if (json != null)
             {
                 String latLong = "&lat=" + json.result.latitude + "&lon=" + json.result.longitude;
-                String stuff = Request.sendRequest(latLong, InputType.LAT_LONG);
+                String stuff   = Request.sendRequest(latLong, InputType.LAT_LONG);
 
                 StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
                 SortedMap<Double, StopPoint> spMap = new TreeMap<>();
@@ -31,7 +31,16 @@ public class ConsoleInput
                 }
 
                 StopPoint[] spArray = new StopPoint[spMap.size()];
-                return spMap.values().toArray(spArray);
+                spMap.values().toArray(spArray);
+
+                ArrayList<StopPoint> spArrayList = new ArrayList<>();
+
+                spArrayList.addAll(Arrays.asList(stopPointPrinting(spArray[0].id)));
+                spArrayList.addAll(Arrays.asList(stopPointPrinting(spArray[1].id)));
+
+                StopPoint[] spArray2 = new StopPoint[spArrayList.size()];
+                spArrayList.toArray(spArray2);
+                return spArray2;
             }
         }
 
@@ -47,7 +56,7 @@ public class ConsoleInput
         else { return InputType.STOP_CODE; }
     }
 
-    private static void stopPointPrinting (String lineOfText)
+    private static StopPoint[] stopPointPrinting (String lineOfText)
     {
         String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
         StopPoint[] json     = JsonParser.jsonParser(response, StopPoint[].class);
@@ -55,5 +64,7 @@ public class ConsoleInput
         {
             System.out.println(json[i]);
         }
+
+        return json;
     }
 }
