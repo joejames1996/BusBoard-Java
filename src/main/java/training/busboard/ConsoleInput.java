@@ -4,15 +4,10 @@ import java.util.*;
 
 public class ConsoleInput
 {
-    public static void readInput ()
-    {
-        Scanner scanner = new Scanner(System.in);
-        do
-        {
-            System.out.println("Please input a postcode or stopcode:");
-            String lineOfText = scanner.nextLine().trim();
-            if (lineOfText.isEmpty()) continue;
 
+
+    public static void readInput (String lineOfText)
+    {
             InputType responseType = getInputType(lineOfText);
             if (responseType == InputType.STOP_CODE) { stopPointPrinting(lineOfText); }
             else if (responseType == InputType.POST_CODE)
@@ -47,7 +42,6 @@ public class ConsoleInput
                     //spMap.values().toArray()
                 }
             }
-        } while (scanner.hasNextLine());
     }
 
     private static InputType getInputType (String input)
