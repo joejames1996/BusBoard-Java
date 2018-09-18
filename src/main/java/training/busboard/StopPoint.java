@@ -6,24 +6,32 @@ public class StopPoint implements Comparable<StopPoint>
 {
     public StopPoint[] stopPoints;
 
-    public String id;
-    private String lineName;
-    private String destinationName;
-    private String commonName;
-    private Date expectedArrival;
-    public double lat;
-    public double lon;
-    public double distanceFromPostcode;
+    public final String id;
+    public final String lineName;
+    public final String destinationName;
+    public final String commonName;
+    public final Date   expectedArrival;
+    public final double lat;
+    public final double lon;
+    public final double distanceFromPostcode;
+
+    public StopPoint (String id, String lineName, String destinationName, String commonName, Date expectedArrival, double lat, double lon,
+                      double distanceFromPostcode)
+    {
+        this.id = id;
+        this.lineName = lineName;
+        this.destinationName = destinationName;
+        this.commonName = commonName;
+        this.expectedArrival = expectedArrival;
+        this.lat = lat;
+        this.lon = lon;
+        this.distanceFromPostcode = distanceFromPostcode;
+    }
 
     public String toString ()
     {
-        return "expectedArrival: " + expectedArrival +
-               "\tlineName: " + lineName +
-               "\tdestinationName: " + destinationName +
-               "\tID: " + id +
-               "\tcommonName: " + commonName +
-                "\tlat: " + lat +
-                "\tlon: " + lon;
+        return "expectedArrival: " + expectedArrival + "\tlineName: " + lineName + "\tdestinationName: " + destinationName + "\tID: " + id + "\tcommonName: " +
+               commonName + "\tlat: " + lat + "\tlon: " + lon;
     }
 
     public int compareTo (StopPoint o)
