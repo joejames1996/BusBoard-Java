@@ -4,13 +4,25 @@ import javafx.scene.paint.Stop;
 
 import java.util.*;
 
-public class ConsoleInput
+public class ConsoleInput extends Thread
 {
+    StopPoint[] stopPointArray;
+    String      url;
+
+    public ConsoleInput (String url) { this.url = url; }
 
     public static StopPoint[] readInput (String lineOfText) throws Exception
     {
         InputType responseType = getInputType(lineOfText);
-        if (responseType == InputType.STOP_CODE) { return stopPointPrinting(lineOfText); }
+        if (responseType == InputType.STOP_CODE)
+        {
+            StopPoint[] json = stopPointPrinting(lineOfText);
+            for (int i = 0; i < json.length && i < 5; i++)
+            {
+                System.out.println(json[i]);
+            }
+            return json;
+        }
         else if (responseType == InputType.POST_CODE)
         {
             String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
@@ -32,8 +44,22 @@ public class ConsoleInput
 
                 List<StopPoint> spArrayList = new ArrayList<>();
 
-                for (double spDouble : spMap.keySet()) { spArrayList.addAll(Arrays.asList(stopPointPrinting(spMap.get(spDouble).id))); }
+                ConsoleInput[] threaded = new ConsoleInput[spMap.size()];
+
+                int threadTotalIndex = 0;
+                for (double spDouble : spMap.keySet())
+                {
+                    threaded[threadTotalIndex] = new ConsoleInput(spMap.get(spDouble).id);
+                    threaded[threadTotalIndex++].start();
+                }
+                for (int threadIndex = 0; threadIndex < threadTotalIndex; threadIndex++)
+                { spArrayList.addAll(Arrays.asList(threaded[threadIndex].stopPointArray)); }
+
                 Collections.sort(spArrayList);
+                for (int index = 0; index < spArrayList.size(); index++)
+                {
+                    System.out.println(spArrayList.get(index));
+                }
 
                 StopPoint[] spArray = new StopPoint[spArrayList.size()];
                 spArrayList.toArray(spArray);
@@ -57,12 +83,9 @@ public class ConsoleInput
     {
         String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
         StopPoint[] json     = JsonParser.jsonParser(response, StopPoint[].class);
-/*
-        for (int i = 0; i < json.length && i < 5; i++)
-        {
-            System.out.println(json[i]);
-        }
-//*/
         return json;
     }
+
+    public void run () { try {stopPointArray = stopPointPrinting(url);} catch (Exception e) {} }
+
 }
