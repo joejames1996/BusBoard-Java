@@ -1,8 +1,5 @@
 package training.busboard;
 
-import org.omg.PortableInterceptor.INACTIVE;
-
-import javax.print.DocFlavor;
 import java.util.Scanner;
 
 public class ConsoleInput
@@ -12,11 +9,11 @@ public class ConsoleInput
         Scanner scanner = new Scanner(System.in);
         do
         {
-            System.out.println("Please input a postcode or stopcode: \n");
-            String lineOfText = scanner.nextLine();
+            System.out.println("Please input a postcode or stopcode:");
+            String lineOfText = scanner.nextLine().trim();
             if (lineOfText.isEmpty()) continue;
 
-            InputType responseType = InputType.POST_CODE;
+            InputType responseType = getInputType(lineOfText);
             if (responseType == InputType.STOP_CODE)
             {
                 String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
@@ -43,5 +40,14 @@ public class ConsoleInput
             }
 
         } while (scanner.hasNextLine());
+    }
+
+    private static InputType getInputType(String input)
+    {
+        if(input.matches("^[^\\d].*"))
+        {
+            return InputType.POST_CODE;
+        }
+        else return InputType.STOP_CODE;
     }
 }
