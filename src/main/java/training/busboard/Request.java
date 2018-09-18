@@ -7,65 +7,48 @@ import javax.ws.rs.client.ClientBuilder;
 
 public class Request
 {
-    private        String naptanId;
-    private static String requestPrefix = "";
-    private static String requestSuffix = "";
+    public static final String requestPrefixLatLon = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=500";
+    public static final String requestPrefixTravel = "https://api.tfl.gov.uk/StopPoint/";
+    public static final String requestSuffixTravel = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
+    public static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
 
-    public static final String requestLatLon = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=500";
-    // public static final String requestPrefixTravel = "https://api.tfl.gov.uk/StopPoint/";
-    // public static final String requestSuffixTravel = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
-    // public static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
-    // public static final String requestSuffixPostcode = "";
-
-    public Request (String naptanId)
-    {
-        this.naptanId = naptanId;
-    }
-
-    public static void getRequestUrl ()
-    {
-        switch (Main.inputType)
-        {
-            case STOP_CODE:
-                requestPrefix = "https://api.tfl.gov.uk/StopPoint/";
-                requestSuffix = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
-                break;
-            case POST_CODE:
-                requestPrefix = "http://api.postcodes.io/postcodes/";
-                requestSuffix = "";
-                break;
-        }
-    }
-
-    private static String buildRequest (String naptanId)
+    public static String buildRequest (String naptanId, InputType inputType)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(requestPrefix);
-        stringBuilder.append(naptanId);
-        stringBuilder.append(requestSuffix);
+        switch (inputType)
+        {
+            case STOP_CODE:
+                stringBuilder.append(requestPrefixTravel);
+                stringBuilder.append(naptanId);
+                stringBuilder.append(requestSuffixTravel);
+                break;
+            case POST_CODE:
+                stringBuilder.append(requestPrefixPostcode);
+                stringBuilder.append(naptanId);
+                break;
+            case LAT_LONG:
+                stringBuilder.append(requestPrefixLatLon);
+                stringBuilder.append(naptanId);
+                break;
+        }
+
         return stringBuilder.toString();
     }
 
-    public static String requestTFL (String naptanId)
+    public static String sendRequest (String naptanId, InputType inputType)
     {
-        Request request       = new Request(naptanId);
-        String  requestString = requestLatLon + naptanId;
-
-        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-
-        System.out.println(requestString);
-        return client.target(requestString).request().get(String.class);
-    }
-
-    public static String sendRequest (String naptanId)
-    {
-        Request request       = new Request(naptanId);
-        String  requestString = request.buildRequest(request.naptanId);
+        String  requestString = Request.buildRequest(naptanId, InputType inputType);
 
         Client client = null;
 
-        if (Main.inputType == InputType.STOP_CODE) { client = ClientBuilder.newBuilder().register(StopPoint.class).register(JacksonFeature.class).build(); }
-        else if (Main.inputType == InputType.POST_CODE) client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        if (inputType == InputType.STOP_CODE)
+        {
+            client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        }
+        else if (inputType == InputType.POST_CODE)
+        {
+            client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        }
 
         System.out.println(requestString);
         return client.target(requestString).request().get(String.class);
