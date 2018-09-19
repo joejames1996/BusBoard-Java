@@ -20,17 +20,13 @@ public class ConsoleInput extends Thread
         // Postcode process
         else if (responseType == InputType.POST_CODE)
         {
-            String   response = Request.sendPostCodeRequest(lineOfText);
-            Postcode postcode = JsonParser.jsonParser(response, Postcode.class);
-            String   jsonResponse = Request.sendRequest(lineOfText, InputType.POST_CODE);
+            String   jsonResponse = Request.sendPostCodeRequest(lineOfText);
             Postcode postcode     = JsonParser.jsonParser(jsonResponse, Postcode.class);
+            
             // Get postcode
             if (postcode != null)
             {
-                //String latLong = "&lat=" + postcode.result.latitude + "&lon=" + postcode.result.longitude; // TODO: clean these lines up
-                String stuff   = Request.sendLatLonRequest(postcode.result.latitude, postcode.result.longitude);
-                jsonResponse = Request.sendRequest(latLong, InputType.LAT_LONG);
-
+                jsonResponse = Request.sendLatLonRequest(postcode.result.latitude, postcode.result.longitude);
                 List<StopPoint>              stopPointList        = Arrays.asList(JsonParser.jsonParser(jsonResponse, StopPoint.class).stopPoints);
                 SortedMap<Double, StopPoint> stopPointDistanceMap = new TreeMap<>();
 
