@@ -16,8 +16,8 @@ public class StopPoint implements Comparable<StopPoint>
     public final double lon;
     public       double distanceFromPostcode;
 
-    public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName, Date expectedArrival, double lat, double lon
-            , double distanceFromPostcode)
+    public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName,
+                      Date expectedArrival, double lat, double lon, double distanceFromPostcode)
     {
         this.id = id;
         this.lineName = lineName;

@@ -13,8 +13,8 @@ public class Main
             String input = scanner.nextLine().trim();
             if (input == null || input.isEmpty()) {continue;}
             ConsoleInput.readInput(input);
-        } while (scanner.hasNextLine());
-
+        }
+        while(scanner.hasNextLine());
     }
 
 }	

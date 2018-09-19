@@ -22,7 +22,7 @@ public class ConsoleInput extends Thread
         {
             String   jsonResponse = Request.sendPostCodeRequest(lineOfText);
             Postcode postcode     = JsonParser.jsonParser(jsonResponse, Postcode.class);
-            
+
             // Get postcode
             if (postcode != null)
             {
@@ -61,7 +61,12 @@ public class ConsoleInput extends Thread
                 System.out.printf("%s Sorting and returning\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
                 Collections.sort(spArrayList);
-                return (StopPoint[]) spArrayList.toArray();
+                StopPoint[] sp = (StopPoint[]) spArrayList.toArray();
+                for (int i = 0; i < sp.length; i++)
+                {
+                    System.out.printf("%s\n", sp[i]);
+                }
+                return sp;
             }
         }
 
@@ -79,7 +84,7 @@ public class ConsoleInput extends Thread
 
     private static StopPoint[] stopPointPrinting (String lineOfText) throws Exception
     {
-        String      response = Request.sendStopPointRequest(lineOfText);
+        String      response       = Request.sendStopPointRequest(lineOfText);
         StopPoint[] stopPointArray = JsonParser.jsonParser(response, StopPoint[].class);
 
         for (int i = 0; i < stopPointArray.length && i < 5; i++)
