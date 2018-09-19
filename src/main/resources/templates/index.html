@@ -7,8 +7,9 @@
 </head>
 <body>
 <div layout:fragment="content" class="container body-content">
-    <div th:if="${error}" class="alert alert-danger">
-        <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
         You didn't put in a valid postcode.
     </div>
     <div class="jumbotron">
