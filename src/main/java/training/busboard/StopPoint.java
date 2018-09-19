@@ -4,17 +4,16 @@ import java.util.Date;
 
 public class StopPoint implements Comparable<StopPoint>
 {
-    public StopPoint[] stopPoints;
-
-    public final String id;
-    public final String lineName;
-    public final String stationName;
-    public final String destinationName;
-    public final String commonName;
-    public final Date   expectedArrival;
-    public final double lat;
-    public final double lon;
-    public       double distanceFromPostcode;
+    StopPoint[] stopPoints;
+    final String id;
+    final String lineName;
+    final String stationName;
+    final String destinationName;
+    final String commonName;
+    final Date   expectedArrival;
+    final double lat;
+    final double lon;
+    double distanceFromPostcode;
 
     public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName, Date expectedArrival, double lat, double lon
             , double distanceFromPostcode)
@@ -32,8 +31,8 @@ public class StopPoint implements Comparable<StopPoint>
 
     public String toString ()
     {
-        return "expectedArrival: " + expectedArrival + "\nlineName: " + lineName + "\ndestinationName: " + destinationName + "\nID: " + id + "\ncommonName: " +
-               commonName + "\nlat: " + lat + "\nlon: " + lon + "\ndistanceFromPostcode: " + distanceFromPostcode;
+        return String.format("Expected Arrival: %s\n" + "Line Name: %s\n" + "Destination Name: %s\n" + "ID: %s\n" + "Common Name: %s\n" + "Latitude: %s\n" +
+                             "Longitude: %s\n" + "Distance: %s\n", expectedArrival, lineName, destinationName, id, commonName, lat, lon, distanceFromPostcode);
     }
 
     public int compareTo (StopPoint o)
@@ -43,8 +42,7 @@ public class StopPoint implements Comparable<StopPoint>
 
     public String getArrival ()
     {
-        return String.format("%02d", expectedArrival.getHours()) + ":" + String.format("%02d", expectedArrival.getMinutes()) + ":" +
-               String.format("%02d", expectedArrival.getSeconds());
+        return String.format("%02d:%02d%02d", expectedArrival.getHours(), expectedArrival.getMinutes(), expectedArrival.getSeconds());
     }
 
 }
