@@ -24,12 +24,12 @@ public class ConsoleInput extends Thread
         }
         else if (responseType == InputType.POST_CODE)
         {
-            String   response = Request.sendRequest(lineOfText, InputType.POST_CODE);
+            String   response = Request.sendPostCodeRequest(lineOfText);
             Postcode postcode = JsonParser.jsonParser(response, Postcode.class);
             if (postcode != null)
             {
-                String latLong = "&lat=" + postcode.result.latitude + "&lon=" + postcode.result.longitude; // TODO: clean these lines up
-                String stuff   = Request.sendRequest(latLong, InputType.LAT_LONG);
+                //String latLong = "&lat=" + postcode.result.latitude + "&lon=" + postcode.result.longitude; // TODO: clean these lines up
+                String stuff   = Request.sendLatLonRequest(postcode.result.latitude, postcode.result.longitude);
 
                 StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
                 SortedMap<Double, StopPoint> spMap = new TreeMap<>();
@@ -80,7 +80,7 @@ public class ConsoleInput extends Thread
 
     private static StopPoint[] stopPointPrinting (String lineOfText) throws Exception
     {
-        String      response = Request.sendRequest(lineOfText, InputType.STOP_CODE);
+        String      response = Request.sendStopPointRequest(lineOfText);
         StopPoint[] json     = JsonParser.jsonParser(response, StopPoint[].class);
         return json;
     }

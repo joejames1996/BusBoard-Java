@@ -4,48 +4,55 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class Request
 {
-    public static final String requestPrefixLatLon   = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=500";
-    public static final String requestPrefixTravel   = "https://api.tfl.gov.uk/StopPoint/";
-    public static final String requestSuffixTravel   = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
-    public static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
+    private static final String requestPrefixLatLon   = "https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanPublicBusCoachTram&modes=bus&radius=500";
+    private static final String requestPrefixTravel   = "https://api.tfl.gov.uk/StopPoint/";
+    private static final String requestSuffixTravel   = "/Arrivals?app_id=ad5c6319&app_key=5df3db201bb778d8ba63676ad04a21e7";
+    private static final String requestPrefixPostcode = "http://api.postcodes.io/postcodes/";
 
-    public static String buildRequest (String naptanId, InputType inputType) throws Exception
+    public static String sendStopPointRequest(String naptanId) throws Exception
     {
         StringBuilder stringBuilder = new StringBuilder();
-        switch (inputType)
-        {
-            case STOP_CODE:
-                stringBuilder.append(requestPrefixTravel);
-                stringBuilder.append(naptanId);
-                stringBuilder.append(requestSuffixTravel);
-                break;
-            case POST_CODE:
-                stringBuilder.append(requestPrefixPostcode);
-                stringBuilder.append(naptanId);
-                break;
-            case LAT_LONG:
-                stringBuilder.append(requestPrefixLatLon);
-                stringBuilder.append(naptanId);
-                break;
-        }
-
-        return stringBuilder.toString();
-    }
-
-    public static String sendRequest (String naptanId, InputType inputType) throws Exception
-    {
-        String requestString = Request.buildRequest(naptanId, inputType);
+        stringBuilder.append(requestPrefixTravel);
+        stringBuilder.append(naptanId);
+        stringBuilder.append(requestSuffixTravel);
+        String request = stringBuilder.toString();
 
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
-
-        System.out.printf("%s %s %s\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), inputType, requestString);
-        String result = client.target(requestString).request().get(String.class);
+        String result = client.target(request).request().get(String.class);
         client.close();
+
+        return result;
+    }
+
+    public static String sendPostCodeRequest(String postcode) throws Exception
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(requestPrefixPostcode);
+        stringBuilder.append(postcode);
+        String request = stringBuilder.toString();
+
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        String result = client.target(request).request().get(String.class);
+        client.close();
+
+        return result;
+    }
+
+    public static String sendLatLonRequest(double lat, double lon)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(requestPrefixLatLon);
+        stringBuilder.append(String.format("&lat=%f", lat));
+        stringBuilder.append(String.format("&lon=%f", lon));
+        String request = stringBuilder.toString();
+
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        String result = client.target(request).request().get(String.class);
+        client.close();
+
         return result;
     }
 }
