@@ -1,9 +1,5 @@
 package training.busboard;
 
-import java.text.DateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
 
 public class StopPoint implements Comparable<StopPoint>

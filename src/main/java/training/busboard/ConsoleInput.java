@@ -1,5 +1,6 @@
 package training.busboard;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsoleInput extends Thread
@@ -56,12 +57,9 @@ public class ConsoleInput extends Thread
                     spArrayList.addAll(Arrays.asList(threaded[threadIndex].stopPointArray));
                 }
 
-                Collections.sort(spArrayList);
-                for (int index = 0; index < spArrayList.size(); index++)
-                {
-                    System.out.println(spArrayList.get(index));
-                }
+                System.out.printf("%s Sorting and returning\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
+                Collections.sort(spArrayList);
                 StopPoint[] spArray = new StopPoint[spArrayList.size()];
                 spArrayList.toArray(spArray);
                 return spArray;
