@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class StopPoint implements Comparable<StopPoint>
 {
-    StopPoint[] stopPoints;
-    final String id;
-    final String lineName;
-    final String stationName;
-    final String destinationName;
-    final String commonName;
-    final Date   expectedArrival;
-    final double lat;
-    final double lon;
-    double distanceFromPostcode;
+    public StopPoint[] stopPoints;
+    public final String id;
+    public final String lineName;
+    public final String stationName;
+    public final String destinationName;
+    public final String commonName;
+    public final Date   expectedArrival;
+    public final double lat;
+    public final double lon;
+    public double distanceFromPostcode;
 
     public StopPoint (String id, String lineName, String stationName, String destinationName, String commonName,
                       Date expectedArrival, double lat, double lon, double distanceFromPostcode)

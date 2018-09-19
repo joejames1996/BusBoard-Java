@@ -59,15 +59,13 @@ public class ConsoleInput extends Thread
                     spArrayList.addAll(Arrays.asList(requestThreadArray[threadIndex].stopPointArray));
                 }
 
-                System.out.printf("%s Sorting and returning\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+                System.out.printf("%s Sorting and returning. Size = %d\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()),
+                                  spArrayList.size());
 
                 Collections.sort(spArrayList);
-                StopPoint[] sp = (StopPoint[]) spArrayList.toArray();
-                for (int i = 0; i < sp.length; i++)
-                {
-                    System.out.printf("%s\n", sp[i]);
-                }
-                return sp;
+                StopPoint[] spArray = new StopPoint[spArrayList.size()];
+                spArrayList.toArray(spArray);
+                return spArray;
             }
         }
 
