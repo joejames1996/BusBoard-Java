@@ -26,11 +26,12 @@ public class ConsoleInput extends Thread
             // Get postcode
             if (postcode != null)
             {
+                // Collect stop points from postcode and order by closeness
                 jsonResponse = Request.sendLatLonRequest(postcode.result.latitude, postcode.result.longitude);
                 List<StopPoint>              stopPointList        = Arrays.asList(JsonParser.jsonParser(jsonResponse, StopPoint.class).stopPoints);
                 SortedMap<Double, StopPoint> stopPointDistanceMap = new TreeMap<>();
 
-                // Distance between current and found stopoints
+                // Distance between current and found stop points
                 for (int stopPointIndex = 0; stopPointIndex < stopPointList.size(); stopPointIndex++)
                 {
                     stopPointList.get(stopPointIndex).distanceFromPostcode = StopsFromLatLong.latLongDistance(postcode.result.latitude,
@@ -75,10 +76,7 @@ public class ConsoleInput extends Thread
 
     private static InputType getInputType (String input)
     {
-        if (input.matches("^[^\\d].*"))
-        {
-            return InputType.POST_CODE;
-        }
+        if (input.matches("^[^\\d].*")) { return InputType.POST_CODE; }
         else { return InputType.STOP_CODE; }
     }
 
@@ -87,11 +85,7 @@ public class ConsoleInput extends Thread
         String      response       = Request.sendStopPointRequest(lineOfText);
         StopPoint[] stopPointArray = JsonParser.jsonParser(response, StopPoint[].class);
 
-        for (int i = 0; i < stopPointArray.length && i < 5; i++)
-        {
-            System.out.printf("%s\n\n", stopPointArray[i]);
-        }
-
+        for (int i = 0; i < stopPointArray.length && i < 5; i++) { System.out.printf("%s\n\n", stopPointArray[i]); }
         return stopPointArray;
     }
 

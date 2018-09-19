@@ -2,6 +2,8 @@ package training.busboard;
 
 public class StopsFromLatLong
 {
+
+    // Stolen from the internet
     public static double latLongDistance (double lat1, double lon1, double lat2, double lon2)
     {
         int    R    = 6371; // Radius of the earth in km
