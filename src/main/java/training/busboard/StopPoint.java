@@ -42,7 +42,7 @@ public class StopPoint implements Comparable<StopPoint>
 
     public String getArrival ()
     {
-        return String.format("%02d:%02d%02d", expectedArrival.getHours(), expectedArrival.getMinutes(), expectedArrival.getSeconds());
+        return String.format("%02d:%02d:%02d", expectedArrival.getHours(), expectedArrival.getMinutes(), expectedArrival.getSeconds());
     }
 
 }
