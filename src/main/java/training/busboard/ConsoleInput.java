@@ -13,56 +13,59 @@ public class ConsoleInput extends Thread
     public static StopPoint[] readInput (String lineOfText) throws Exception
     {
         InputType responseType = getInputType(lineOfText);
-        if (responseType == InputType.STOP_CODE)
-        {
-            StopPoint[] json = stopPointPrinting(lineOfText);
-            for (int i = 0; i < json.length && i < 5; i++)
-            {
-                System.out.println(json[i]);
-            }
-            return json;
-        }
+
+        // Stop Code process
+        if (responseType == InputType.STOP_CODE) { return stopPointPrinting(lineOfText); }
+
+        // Postcode process
         else if (responseType == InputType.POST_CODE)
         {
             String   response = Request.sendPostCodeRequest(lineOfText);
             Postcode postcode = JsonParser.jsonParser(response, Postcode.class);
+            String   jsonResponse = Request.sendRequest(lineOfText, InputType.POST_CODE);
+            Postcode postcode     = JsonParser.jsonParser(jsonResponse, Postcode.class);
+            // Get postcode
             if (postcode != null)
             {
                 //String latLong = "&lat=" + postcode.result.latitude + "&lon=" + postcode.result.longitude; // TODO: clean these lines up
                 String stuff   = Request.sendLatLonRequest(postcode.result.latitude, postcode.result.longitude);
+                jsonResponse = Request.sendRequest(latLong, InputType.LAT_LONG);
 
-                StopPoint                    sp    = JsonParser.jsonParser(stuff, StopPoint.class);
-                SortedMap<Double, StopPoint> spMap = new TreeMap<>();
+                List<StopPoint>              stopPointList        = Arrays.asList(JsonParser.jsonParser(jsonResponse, StopPoint.class).stopPoints);
+                SortedMap<Double, StopPoint> stopPointDistanceMap = new TreeMap<>();
 
-                for (int i = 0; i < sp.stopPoints.length; i++)
+                // Distance between current and found stopoints
+                for (int stopPointIndex = 0; stopPointIndex < stopPointList.size(); stopPointIndex++)
                 {
-                    sp.stopPoints[i].distanceFromPostcode = StopsFromLatLong.latLongDistance(postcode.result.latitude, postcode.result.longitude,
-                                                                                             sp.stopPoints[i].lat, sp.stopPoints[i].lon);
-                    spMap.put(sp.stopPoints[i].distanceFromPostcode, sp.stopPoints[i]);
+                    stopPointList.get(stopPointIndex).distanceFromPostcode = StopsFromLatLong.latLongDistance(postcode.result.latitude,
+                                                                                                              postcode.result.longitude,
+                                                                                                              stopPointList.get(stopPointIndex).lat,
+                                                                                                              stopPointList.get(stopPointIndex).lon);
+                    stopPointDistanceMap.put(stopPointList.get(stopPointIndex).distanceFromPostcode, stopPointList.get(stopPointIndex));
                 }
 
-                List<StopPoint> spArrayList = new ArrayList<>();
+                // Thread Data
+                int             threadTotalIndex   = 0;
+                List<StopPoint> spArrayList        = new ArrayList<>();
+                ConsoleInput[]  requestThreadArray = new ConsoleInput[stopPointDistanceMap.size()];
 
-                ConsoleInput[] threaded = new ConsoleInput[spMap.size()];
-
-                int threadTotalIndex = 0;
-                for (double spDouble : spMap.keySet())
+                // Create Threads for stop code process
+                for (double spDouble : stopPointDistanceMap.keySet())
                 {
-                    threaded[threadTotalIndex] = new ConsoleInput(spMap.get(spDouble).id);
-                    threaded[threadTotalIndex++].start();
+                    requestThreadArray[threadTotalIndex] = new ConsoleInput(stopPointDistanceMap.get(spDouble).id);
+                    requestThreadArray[threadTotalIndex++].start();
                 }
+                // Join threads back
                 for (int threadIndex = 0; threadIndex < threadTotalIndex; threadIndex++)
                 {
-                    threaded[threadIndex].join();
-                    spArrayList.addAll(Arrays.asList(threaded[threadIndex].stopPointArray));
+                    requestThreadArray[threadIndex].join();
+                    spArrayList.addAll(Arrays.asList(requestThreadArray[threadIndex].stopPointArray));
                 }
 
                 System.out.printf("%s Sorting and returning\n", new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
                 Collections.sort(spArrayList);
-                StopPoint[] spArray = new StopPoint[spArrayList.size()];
-                spArrayList.toArray(spArray);
-                return spArray;
+                return (StopPoint[]) spArrayList.toArray();
             }
         }
 
@@ -81,8 +84,14 @@ public class ConsoleInput extends Thread
     private static StopPoint[] stopPointPrinting (String lineOfText) throws Exception
     {
         String      response = Request.sendStopPointRequest(lineOfText);
-        StopPoint[] json     = JsonParser.jsonParser(response, StopPoint[].class);
-        return json;
+        StopPoint[] stopPointArray = JsonParser.jsonParser(response, StopPoint[].class);
+
+        for (int i = 0; i < stopPointArray.length && i < 5; i++)
+        {
+            System.out.printf("%s\n\n", stopPointArray[i]);
+        }
+
+        return stopPointArray;
     }
 
     public void run () { try {stopPointArray = stopPointPrinting(url);} catch (Exception e) {} }
